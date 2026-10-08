@@ -43,7 +43,8 @@ def error_response(status: int, code: str, message: str) -> JSONResponse:
 
 
 async def _api_error(_: Request, exc: Exception) -> JSONResponse:
-    assert isinstance(exc, ApiError)  # noqa: S101
+    if not isinstance(exc, ApiError):
+        raise exc
     return error_response(exc.status, exc.code, exc.message)
 
 
@@ -57,7 +58,8 @@ async def _validation(_: Request, __: Exception) -> JSONResponse:
 
 
 async def _http_exception(_: Request, exc: Exception) -> JSONResponse:
-    assert isinstance(exc, StarletteHTTPException)  # noqa: S101
+    if not isinstance(exc, StarletteHTTPException):
+        raise exc
     code, message = _GENERIC_CODES.get(exc.status_code, ("http_error", "Request failed"))
     return error_response(exc.status_code, code, message)
 
