@@ -121,6 +121,25 @@ async def test_connection_errors_map_to_unavailable(exc: BaseException) -> None:
         await database.run(op)
 
 
+async def test_deadline_missed_at_boundary_maps_to_unavailable() -> None:
+    conn = MagicMock(execute=AsyncMock(), commit=AsyncMock(), rollback=AsyncMock())
+    database = make_db(conn)
+    database._schema_ready = True
+
+    async def op(_: Any) -> None:
+        return None
+
+    # Deadline already in the past when the op returns: rolled back, answered as 503.
+    async def late(op_: Any, _deadline: float) -> None:
+        return await Database._guarded(database, op_, 0.0)
+
+    database._guarded = late  # type: ignore[method-assign]
+    with pytest.raises(DatabaseUnavailable):
+        await database.run(op)
+    conn.rollback.assert_awaited_once()
+    conn.commit.assert_not_awaited()
+
+
 async def test_non_connection_errors_propagate() -> None:
     database = make_db()
     database._schema_ready = True

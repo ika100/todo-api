@@ -102,7 +102,7 @@ class Database:
             raise DatabaseUnavailable
         try:
             return task.result()
-        except _CONNECTION_ERRORS as exc:
+        except (*_CONNECTION_ERRORS, _DeadlineMissedError) as exc:
             logger.warning("database_unavailable", error=type(exc).__name__)
             raise DatabaseUnavailable from exc
 
