@@ -47,6 +47,7 @@ tasks:
     AC-001.12, AC-001.13, AC-001.14, AC-001.15, AC-001.16, AC-001.17, AC-001.18]
   parallel_safe: true
   depends_on: [t2, t4, t5]
+  done: true
 ---
 
 # Plan — 001 Todo REST API persisted in Postgres
