@@ -50,13 +50,13 @@ async def create_todo(request: Request) -> JSONResponse:
 
 @router.patch("/{todo_id}")
 async def patch_todo(todo_id: str, request: Request) -> JSONResponse:
-    done = parse_patch(await request.body())
+    req = parse_patch(await request.body())
     parsed = parse_id(todo_id)
     if parsed is None:
         raise _not_found()
 
     async def op(conn: Any) -> Todo | None:
-        return await repository.set_done(conn, parsed, done)
+        return await repository.update_todo(conn, parsed, title=req.title, done=req.done)
 
     todo = await request.app.state.db.run(op)
     if todo is None:

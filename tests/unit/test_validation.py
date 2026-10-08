@@ -1,7 +1,9 @@
+import json
+
 import pytest
 
 from todo_api.errors import ApiError
-from todo_api.todos.validation import parse_create, parse_id, parse_patch
+from todo_api.todos.validation import PatchRequest, parse_create, parse_id, parse_patch
 
 
 @pytest.mark.parametrize(
@@ -43,8 +45,33 @@ def test_parse_patch_rejects(raw: bytes) -> None:
 
 
 def test_parse_patch_accepts() -> None:
-    assert parse_patch(b'{"done": true}') is True
-    assert parse_patch(b'{"done": false}') is False
+    assert parse_patch(b'{"done": true}') == PatchRequest(title=None, done=True)
+    assert parse_patch(b'{"done": false}') == PatchRequest(title=None, done=False)
+    assert parse_patch(b'{"title": "a"}') == PatchRequest(title="a", done=None)
+    assert parse_patch(b'{"title": "a", "done": true}') == PatchRequest(title="a", done=True)
+    assert parse_patch(b'{"title": "  a  "}') == PatchRequest(title="a", done=None)
+
+
+def test_parse_patch_title_lengths() -> None:
+    assert parse_patch(json.dumps({"title": "x" * 200}).encode()).title == "x" * 200
+    with pytest.raises(ApiError) as exc:
+        parse_patch(json.dumps({"title": "x" * 201}).encode())
+    assert exc.value.code == "title_too_long"
+
+
+@pytest.mark.parametrize(
+    ("raw", "code"),
+    [
+        (b'{"done": "x", "title": null}', "invalid_request"),
+        (b'{"title": null, "done": true}', "title_required"),
+        (b'{"title": "  "}', "title_required"),
+        (b'{"title": 42}', "invalid_request"),
+    ],
+)
+def test_parse_patch_rule_order(raw: bytes, code: str) -> None:
+    with pytest.raises(ApiError) as exc:
+        parse_patch(raw)
+    assert exc.value.code == code
 
 
 def test_parse_id() -> None:

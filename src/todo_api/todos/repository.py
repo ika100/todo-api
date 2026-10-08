@@ -47,15 +47,6 @@ async def create_todo(conn: AsyncConnection, title: str) -> Todo:
     return row
 
 
-async def set_done(conn: AsyncConnection, todo_id: UUID, done: bool) -> Todo | None:
-    async with conn.cursor(row_factory=class_row(Todo)) as cur:
-        await cur.execute(
-            "UPDATE todos SET done = %s WHERE id = %s RETURNING id, title, done, created_at",
-            (done, todo_id),
-        )
-        return await cur.fetchone()
-
-
 async def update_todo(
     conn: AsyncConnection, todo_id: UUID, *, title: str | None, done: bool | None
 ) -> Todo | None:
