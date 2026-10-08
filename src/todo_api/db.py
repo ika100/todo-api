@@ -40,6 +40,10 @@ def _consume(task: asyncio.Task[object]) -> None:
         logger.warning("database_abandoned_operation_failed", error=type(exc).__name__)
 
 
+class _DeadlineMissedError(Exception):
+    """The operation finished after its deadline; it was rolled back, not committed."""
+
+
 class Database:
     """Owns the pool; every operation answers within OP_DEADLINE_S."""
 
@@ -76,16 +80,20 @@ class Database:
                 await conn.execute(self._schema_sql.encode())
             self._schema_ready = True
 
-    async def _guarded(self, op: Callable[[AsyncConnection], Awaitable[T]]) -> T:
+    async def _guarded(self, op: Callable[[AsyncConnection], Awaitable[T]], deadline: float) -> T:
         if not self._schema_ready:
             await self.ensure_schema()
         async with self._pool.connection() as conn:
             result = await op(conn)
+            if asyncio.get_running_loop().time() >= deadline:
+                await conn.rollback()
+                raise _DeadlineMissedError
             await conn.commit()
             return result
 
     async def run(self, op: Callable[[AsyncConnection], Awaitable[T]]) -> T:
-        task: asyncio.Task[T] = asyncio.ensure_future(self._guarded(op))
+        deadline = asyncio.get_running_loop().time() + OP_DEADLINE_S
+        task: asyncio.Task[T] = asyncio.ensure_future(self._guarded(op, deadline))
         done, _ = await asyncio.wait({task}, timeout=OP_DEADLINE_S)
         if not done:
             _background_tasks.add(task)
