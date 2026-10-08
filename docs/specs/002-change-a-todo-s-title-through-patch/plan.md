@@ -27,6 +27,7 @@ tasks:
     AC-002.12, AC-002.13]
   parallel_safe: true
   depends_on: [t1]
+  done: true
 ---
 
 # Plan — 002 Change a todo's title through PATCH /todos/{id}
