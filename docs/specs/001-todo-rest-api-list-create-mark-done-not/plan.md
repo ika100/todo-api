@@ -39,6 +39,7 @@ tasks:
   covers: [AC-001.1, AC-001.2, AC-001.3, AC-001.7, AC-001.9, AC-001.10, AC-001.12, AC-001.13, AC-001.16]
   parallel_safe: true
   depends_on: [t1]
+  done: true
 - id: t6
   title: Add the /todos router and wire create_app, lifespan and /ready
   files: [src/todo_api/todos/router.py, src/todo_api/main.py]
