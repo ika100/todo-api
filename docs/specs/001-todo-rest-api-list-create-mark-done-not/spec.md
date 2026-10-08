@@ -1,7 +1,7 @@
 ---
 spec_id: 001-todo-rest-api-list-create-mark-done-not
 title: Todo REST API (list, create, mark done/not done, delete) persisted in Postgres
-status: building
+status: done
 priority: P1
 shape: service-python
 parent: ika100/todo:001-todo-list
@@ -160,3 +160,4 @@ All error bodies below have the contract's shape `{"error": {"code": "<code>", "
 - 2026-10-08 amended: answered the open question; a 503 `unavailable` within 3 seconds while the database is unreachable is confirmed in AC-001.17 (text unchanged)
 - 2026-10-08 approved
 - 2026-10-08 building
+- 2026-10-08 done
