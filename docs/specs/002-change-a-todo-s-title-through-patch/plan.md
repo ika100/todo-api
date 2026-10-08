@@ -2,8 +2,8 @@
 spec_id: 002-change-a-todo-s-title-through-patch
 shape: service-python
 spec_hash: 73b5f6f1ea1c
-summary: Extend PATCH /todos/{id} to change the title (shared title rules with create, one UPDATE, last write wins) and
-  never commit an operation that missed its deadline
+summary: Extend PATCH /todos/{id} to change the title (shared title rules with create, one UPDATE, last write wins) and never
+  commit an operation that missed its deadline
 tasks:
 - id: t1
   title: Add repository.update_todo (title and/or done in one UPDATE)
@@ -11,16 +11,18 @@ tasks:
   covers: [AC-002.1, AC-002.2, AC-002.3, AC-002.4, AC-002.7, AC-002.12]
   parallel_safe: true
   depends_on: []
+  done: true
 - id: t2
   title: Roll back instead of committing when an operation misses its deadline
   files: [src/todo_api/db.py]
   covers: [AC-002.13]
   parallel_safe: true
   depends_on: []
+  done: true
 - id: t3
   title: Parse title in PATCH with the shared title rules and wire patch_todo to update_todo
-  files: [src/todo_api/todos/validation.py, src/todo_api/todos/router.py, src/todo_api/todos/repository.py,
-    tests/unit/test_validation.py, README.md]
+  files: [src/todo_api/todos/validation.py, src/todo_api/todos/router.py, src/todo_api/todos/repository.py, tests/unit/test_validation.py,
+    README.md]
   covers: [AC-002.1, AC-002.2, AC-002.3, AC-002.4, AC-002.5, AC-002.6, AC-002.7, AC-002.8, AC-002.9, AC-002.10, AC-002.11,
     AC-002.12, AC-002.13]
   parallel_safe: true

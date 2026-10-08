@@ -184,7 +184,9 @@ def test_rule_order_before_id_lookup(client: TestClient, raw, status, err, targe
 
 def test_rule_order_on_existing_todo(client: TestClient):  # AC-002.10
     todo = create(client)
-    assert_error(patch_raw(client, todo["id"], b'{"done": "x", "title": null}'), 422, "invalid_request")
+    assert_error(
+        patch_raw(client, todo["id"], b'{"done": "x", "title": null}'), 422, "invalid_request"
+    )
     assert_error(patch_raw(client, todo["id"], b'{"title": null, "done": true}'), 422, REQUIRED)
     assert client.get("/todos").json() == [todo]
 
@@ -208,9 +210,7 @@ def test_done_only_unchanged_title(client: TestClient, body: dict):  # AC-002.11
 def test_last_write_wins_no_conflict(client: TestClient):  # AC-002.12
     todo = create(client)
     assert patch_title(client, todo["id"], "A").status_code == 200
-    r = client.patch(
-        f"/todos/{todo['id']}", json={"title": "B"}, headers={"If-Match": '"stale"'}
-    )
+    r = client.patch(f"/todos/{todo['id']}", json={"title": "B"}, headers={"If-Match": '"stale"'})
     assert r.status_code == 200, r.text
     assert r.json()["title"] == "B"
     assert client.get("/todos").json()[0]["title"] == "B"
