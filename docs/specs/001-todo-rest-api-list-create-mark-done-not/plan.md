@@ -32,6 +32,7 @@ tasks:
   covers: [AC-001.15, AC-001.16, AC-001.17, AC-001.18]
   parallel_safe: true
   depends_on: [t1, t2]
+  done: true
 - id: t5
   title: Add the todos table DDL and repository queries
   files: [src/todo_api/todos/repository.py]
