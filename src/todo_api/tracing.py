@@ -1,8 +1,10 @@
 """OpenTelemetry tracing for todo-api.
 
-Configured through the standard OpenTelemetry variables, which the platform's observability addon injects:
-OTEL_EXPORTER_OTLP_ENDPOINT (e.g. http://otel-collector:4318), OTEL_EXPORTER_OTLP_PROTOCOL (http/protobuf by
-default, or grpc), OTEL_SERVICE_NAME and OTEL_RESOURCE_ATTRIBUTES. The older OTLP_ENDPOINT (gRPC) still works.
+Configured through the standard OpenTelemetry variables, which the platform's
+observability addon injects: OTEL_EXPORTER_OTLP_ENDPOINT (e.g.
+http://otel-collector:4318), OTEL_EXPORTER_OTLP_PROTOCOL (http/protobuf by
+default, or grpc), OTEL_SERVICE_NAME and OTEL_RESOURCE_ATTRIBUTES. The older
+OTLP_ENDPOINT (gRPC) still works.
 Tracing is a no-op until configure_tracing() is called from the application entrypoint.
 """
 
@@ -24,13 +26,19 @@ def build_exporter() -> SpanExporter:
     """OTLP exporter chosen from the environment (the SDK reads the endpoint and headers itself)."""
     if os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT"):
         if os.environ.get("OTEL_EXPORTER_OTLP_PROTOCOL", "http/protobuf") == "grpc":
-            from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter as GrpcExporter
+            from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
+                OTLPSpanExporter as GrpcExporter,
+            )
 
             return GrpcExporter()
-        from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter as HttpExporter
+        from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
+            OTLPSpanExporter as HttpExporter,
+        )
 
         return HttpExporter()
-    from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter as LegacyExporter
+    from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
+        OTLPSpanExporter as LegacyExporter,
+    )
 
     return LegacyExporter(endpoint=os.environ["OTLP_ENDPOINT"])
 
