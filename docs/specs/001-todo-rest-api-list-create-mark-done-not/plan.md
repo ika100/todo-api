@@ -18,12 +18,14 @@ tasks:
   covers: [AC-001.4, AC-001.5, AC-001.6, AC-001.7, AC-001.8, AC-001.11, AC-001.13, AC-001.17]
   parallel_safe: true
   depends_on: []
+  done: true
 - id: t3
   title: Document DATABASE_URL and the Postgres test setup
   files: [docs/env-vars.md, README.md]
   covers: [AC-001.15]
   parallel_safe: true
   depends_on: []
+  done: true
 - id: t4
   title: Add the Database pool with deadline, error mapping and schema-on-startup
   files: [src/todo_api/db.py]
