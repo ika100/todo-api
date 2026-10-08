@@ -24,7 +24,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/todos \
 
 - `GET /todos` list todos
 - `POST /todos` create a todo
-- `PATCH /todos/{id}` mark a todo done
+- `PATCH /todos/{id}` mark a todo done or not done (`{"done": true|false}`)
 - `DELETE /todos/{id}` delete a todo
 
 Details: [spec](docs/specs/001-todo-rest-api-list-create-mark-done-not/spec.md) and [design](docs/specs/001-todo-rest-api-list-create-mark-done-not/design.md).
