@@ -7,9 +7,8 @@ import time
 import uuid
 
 import pytest
-from fastapi.testclient import TestClient
-
 from conftest import UNREACHABLE_URL, drop_todos, make_app, running
+from fastapi.testclient import TestClient
 
 TS_RE = re.compile(r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$")
 UNAVAILABLE = {
@@ -136,7 +135,16 @@ def test_create_title_exactly_200(client: TestClient, title: str):  # AC-001.7
 
 @pytest.mark.parametrize(
     "raw",
-    [b"{not json", b"", b"[]", b'"x"', b"42", b'{"title": 42}', b'{"title": true}', b'{"title": ["x"]}'],
+    [
+        b"{not json",
+        b"",
+        b"[]",
+        b'"x"',
+        b"42",
+        b'{"title": 42}',
+        b'{"title": true}',
+        b'{"title": ["x"]}',
+    ],
 )
 def test_create_invalid_request(client: TestClient, raw: bytes):  # AC-001.8
     r = post_raw(client, raw)
@@ -183,7 +191,17 @@ def test_patch_mark_not_done(client: TestClient):  # AC-001.10
 
 
 @pytest.mark.parametrize(
-    "raw", [b"[]", b'"x"', b"{not json", b"", b"{}", b'{"done": "true"}', b'{"done": 1}', b'{"done": null}']
+    "raw",
+    [
+        b"[]",
+        b'"x"',
+        b"{not json",
+        b"",
+        b"{}",
+        b'{"done": "true"}',
+        b'{"done": 1}',
+        b'{"done": null}',
+    ],
 )
 def test_patch_invalid_request(client: TestClient, raw: bytes):  # AC-001.11
     todo = create(client)
@@ -210,7 +228,9 @@ def test_unknown_id_is_404_without_side_effects(client: TestClient):  # AC-001.1
     for tid in (str(uuid.uuid4()), gone["id"], "abc"):
         assert_error(
             client.patch(f"/todos/{tid}", json={"done": True}),
-            404, "todo_not_found", "This todo no longer exists",
+            404,
+            "todo_not_found",
+            "This todo no longer exists",
         )
         assert_error(
             client.delete(f"/todos/{tid}"), 404, "todo_not_found", "This todo no longer exists"

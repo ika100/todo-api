@@ -1,4 +1,7 @@
-"""Tracing is configured from the standard OpenTelemetry variables and is off without an endpoint."""
+"""Tracing is configured from the standard OpenTelemetry variables.
+
+It is off without an endpoint.
+"""
 
 import pytest
 
@@ -7,7 +10,12 @@ from todo_api import tracing
 
 @pytest.fixture(autouse=True)
 def clean_env(monkeypatch):
-    for k in ("OTEL_EXPORTER_OTLP_ENDPOINT", "OTEL_EXPORTER_OTLP_PROTOCOL", "OTLP_ENDPOINT", "OTEL_SERVICE_NAME"):
+    for k in (
+        "OTEL_EXPORTER_OTLP_ENDPOINT",
+        "OTEL_EXPORTER_OTLP_PROTOCOL",
+        "OTLP_ENDPOINT",
+        "OTEL_SERVICE_NAME",
+    ):
         monkeypatch.delenv(k, raising=False)
 
 
