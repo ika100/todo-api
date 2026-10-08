@@ -31,33 +31,57 @@ Key signatures (types only, no implementation):
 # errors.py
 class ApiError(Exception):
     def __init__(self, status: int, code: str, message: str) -> None: ...
+
+
 class DatabaseUnavailable(Exception): ...
+
+
 def install_error_handlers(app: FastAPI) -> None: ...
+
 
 # db.py
 OP_DEADLINE_S = 2.5
+
+
 class Database:
     def __init__(self, url: str, schema_sql: str) -> None: ...
-    async def open(self) -> None: ...            # pool.open(wait=False), then try ensure_schema (log, never raise)
+    async def open(
+        self,
+    ) -> None: ...  # pool.open(wait=False), then try ensure_schema (log, never raise)
     async def close(self) -> None: ...
-    async def run(self, op: Callable[[AsyncConnection], Awaitable[T]]) -> T: ...
+    async def run(self, op: Callable[[AsyncConnection], Awaitable[T]]) -> T:
+        ...
         # ensure_schema if not done; checkout; op; commit — in one task awaited at most OP_DEADLINE_S.
         # On timeout the task is left to finish in the background (kept in a set, its exception consumed and
         # logged) and DatabaseUnavailable is raised. Connection-class errors -> DatabaseUnavailable.
-    async def ping(self) -> None: ...            # SELECT 1 through run(); raises DatabaseUnavailable
+
+    async def ping(self) -> None: ...  # SELECT 1 through run(); raises DatabaseUnavailable
+
 
 # todos/repository.py
 SCHEMA_SQL: str
+
+
 @dataclass(frozen=True)
 class Todo:
-    id: UUID; title: str; done: bool; created_at: datetime
+    id: UUID
+    title: str
+    done: bool
+    created_at: datetime
+
+
 async def list_todos(conn: AsyncConnection) -> list[Todo]: ...
 async def create_todo(conn: AsyncConnection, title: str) -> Todo: ...
-async def set_done(conn: AsyncConnection, todo_id: UUID, done: bool) -> Todo | None: ...   # None = not found
-async def delete_todo(conn: AsyncConnection, todo_id: UUID) -> bool: ...                    # False = not found
+async def set_done(
+    conn: AsyncConnection, todo_id: UUID, done: bool
+) -> Todo | None: ...  # None = not found
+async def delete_todo(conn: AsyncConnection, todo_id: UUID) -> bool: ...  # False = not found
+
 
 # main.py
 def create_app(database_url: str | None = None) -> FastAPI: ...
+
+
 app: FastAPI  # = create_app()
 ```
 
