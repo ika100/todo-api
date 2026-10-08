@@ -2,44 +2,47 @@
 spec_id: 001-todo-rest-api-list-create-mark-done-not
 shape: service-python
 spec_hash: aa586698c309
-summary: Todo REST API (list, create, mark done/not done, delete) on psycopg 3 + Postgres, with the contract's error format and a DB-aware /ready
+summary: Todo REST API (list, create, mark done/not done, delete) on psycopg 3 + Postgres, with the contract's error format
+  and a DB-aware /ready
 tasks:
-  - id: t1
-    title: Add psycopg 3 (binary, pool) and testcontainers dependencies
-    files: [pyproject.toml, uv.lock]
-    covers: [AC-001.15, AC-001.16]
-    parallel_safe: true
-    depends_on: []
-  - id: t2
-    title: Add the error model and request validation
-    files: [src/todo_api/errors.py, src/todo_api/todos/__init__.py, src/todo_api/todos/validation.py]
-    covers: [AC-001.4, AC-001.5, AC-001.6, AC-001.7, AC-001.8, AC-001.11, AC-001.13, AC-001.17]
-    parallel_safe: true
-    depends_on: []
-  - id: t3
-    title: Document DATABASE_URL and the Postgres test setup
-    files: [docs/env-vars.md, README.md]
-    covers: [AC-001.15]
-    parallel_safe: true
-    depends_on: []
-  - id: t4
-    title: Add the Database pool with deadline, error mapping and schema-on-startup
-    files: [src/todo_api/db.py]
-    covers: [AC-001.15, AC-001.16, AC-001.17, AC-001.18]
-    parallel_safe: true
-    depends_on: [t1, t2]
-  - id: t5
-    title: Add the todos table DDL and repository queries
-    files: [src/todo_api/todos/repository.py]
-    covers: [AC-001.1, AC-001.2, AC-001.3, AC-001.7, AC-001.9, AC-001.10, AC-001.12, AC-001.13, AC-001.16]
-    parallel_safe: true
-    depends_on: [t1]
-  - id: t6
-    title: Add the /todos router and wire create_app, lifespan and /ready
-    files: [src/todo_api/todos/router.py, src/todo_api/main.py]
-    covers: [AC-001.1, AC-001.2, AC-001.3, AC-001.4, AC-001.5, AC-001.6, AC-001.7, AC-001.8, AC-001.9, AC-001.10, AC-001.11, AC-001.12, AC-001.13, AC-001.14, AC-001.15, AC-001.16, AC-001.17, AC-001.18]
-    parallel_safe: true
-    depends_on: [t2, t4, t5]
+- id: t1
+  title: Add psycopg 3 (binary, pool) and testcontainers dependencies
+  files: [pyproject.toml, uv.lock]
+  covers: [AC-001.15, AC-001.16]
+  parallel_safe: true
+  depends_on: []
+  done: true
+- id: t2
+  title: Add the error model and request validation
+  files: [src/todo_api/errors.py, src/todo_api/todos/__init__.py, src/todo_api/todos/validation.py]
+  covers: [AC-001.4, AC-001.5, AC-001.6, AC-001.7, AC-001.8, AC-001.11, AC-001.13, AC-001.17]
+  parallel_safe: true
+  depends_on: []
+- id: t3
+  title: Document DATABASE_URL and the Postgres test setup
+  files: [docs/env-vars.md, README.md]
+  covers: [AC-001.15]
+  parallel_safe: true
+  depends_on: []
+- id: t4
+  title: Add the Database pool with deadline, error mapping and schema-on-startup
+  files: [src/todo_api/db.py]
+  covers: [AC-001.15, AC-001.16, AC-001.17, AC-001.18]
+  parallel_safe: true
+  depends_on: [t1, t2]
+- id: t5
+  title: Add the todos table DDL and repository queries
+  files: [src/todo_api/todos/repository.py]
+  covers: [AC-001.1, AC-001.2, AC-001.3, AC-001.7, AC-001.9, AC-001.10, AC-001.12, AC-001.13, AC-001.16]
+  parallel_safe: true
+  depends_on: [t1]
+- id: t6
+  title: Add the /todos router and wire create_app, lifespan and /ready
+  files: [src/todo_api/todos/router.py, src/todo_api/main.py]
+  covers: [AC-001.1, AC-001.2, AC-001.3, AC-001.4, AC-001.5, AC-001.6, AC-001.7, AC-001.8, AC-001.9, AC-001.10, AC-001.11,
+    AC-001.12, AC-001.13, AC-001.14, AC-001.15, AC-001.16, AC-001.17, AC-001.18]
+  parallel_safe: true
+  depends_on: [t2, t4, t5]
 ---
 
 # Plan — 001 Todo REST API persisted in Postgres
