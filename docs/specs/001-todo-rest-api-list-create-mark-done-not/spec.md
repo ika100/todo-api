@@ -152,8 +152,9 @@ All error bodies below have the contract's shape `{"error": {"code": "<code>", "
 
 ## Open questions
 
-- Confirm: when the database is unreachable, todo-api answers `503 unavailable` within 3 seconds rather than waiting longer, so todo-web gets the 503 before its own 5-second timeout. (suggested: yes, 3 seconds; affects AC-001.17)
+- ~~Confirm: when the database is unreachable, todo-api answers `503 unavailable` within 3 seconds rather than waiting longer, so todo-web gets the 503 before its own 5-second timeout.~~ Answered: yes, 3 seconds, see AC-001.17.
 
 ## Changelog
 
 - 2026-10-08 created
+- 2026-10-08 amended: answered the open question; a 503 `unavailable` within 3 seconds while the database is unreachable is confirmed in AC-001.17 (text unchanged)
