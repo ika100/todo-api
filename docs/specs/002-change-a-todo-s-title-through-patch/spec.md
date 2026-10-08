@@ -1,7 +1,7 @@
 ---
 spec_id: 002-change-a-todo-s-title-through-patch
 title: Change a todo's title through PATCH /todos/{id}, with the same validation and trimming as create
-status: building
+status: done
 priority: P1
 shape: service-python
 parent: ika100/todo:002-update-a-notice
@@ -165,3 +165,4 @@ None: the product spec and its contract decide every behaviour of this slice.
 - 2026-10-08 created
 - 2026-10-08 approved
 - 2026-10-08 building
+- 2026-10-08 done
