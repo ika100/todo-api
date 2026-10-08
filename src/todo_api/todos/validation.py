@@ -3,12 +3,19 @@
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from typing import Any
 from uuid import UUID
 
 from todo_api.errors import MSG_INVALID_REQUEST, MSG_TITLE_REQUIRED, MSG_TITLE_TOO_LONG, ApiError
 
 MAX_TITLE_LENGTH = 200
+
+
+@dataclass(frozen=True)
+class PatchRequest:
+    title: str | None  # stripped; None = not in the request
+    done: bool | None  # None = not in the request
 
 
 def _invalid() -> ApiError:
@@ -25,15 +32,12 @@ def _load_object(raw: bytes) -> dict[str, Any]:
     return data
 
 
-def parse_create(raw: bytes) -> str:
-    """Return the stripped title of a POST /todos body or raise ApiError."""
-    data = _load_object(raw)
-    title = data.get("title")
-    if title is None:
+def _parse_title(value: object) -> str:
+    if value is None:
         raise ApiError(422, "title_required", MSG_TITLE_REQUIRED)
-    if not isinstance(title, str):
+    if not isinstance(value, str):
         raise _invalid()
-    stripped = title.strip()
+    stripped = value.strip()
     if stripped == "":
         raise ApiError(422, "title_required", MSG_TITLE_REQUIRED)
     if len(stripped) > MAX_TITLE_LENGTH:
@@ -41,13 +45,23 @@ def parse_create(raw: bytes) -> str:
     return stripped
 
 
-def parse_patch(raw: bytes) -> bool:
-    """Return the `done` value of a PATCH /todos/{id} body or raise ApiError."""
+def parse_create(raw: bytes) -> str:
+    """Return the stripped title of a POST /todos body or raise ApiError."""
+    return _parse_title(_load_object(raw).get("title"))
+
+
+def parse_patch(raw: bytes) -> PatchRequest:
+    """Return the fields of a PATCH /todos/{id} body or raise ApiError."""
     data = _load_object(raw)
-    done = data.get("done")
-    if not isinstance(done, bool):
+    if "title" not in data and "done" not in data:
         raise _invalid()
-    return done
+    done: bool | None = None
+    if "done" in data:
+        if not isinstance(data["done"], bool):
+            raise _invalid()
+        done = data["done"]
+    title = _parse_title(data["title"]) if "title" in data else None
+    return PatchRequest(title=title, done=done)
 
 
 def parse_id(value: str) -> UUID | None:

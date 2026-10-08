@@ -47,11 +47,16 @@ async def create_todo(conn: AsyncConnection, title: str) -> Todo:
     return row
 
 
-async def set_done(conn: AsyncConnection, todo_id: UUID, done: bool) -> Todo | None:
+async def update_todo(
+    conn: AsyncConnection, todo_id: UUID, *, title: str | None, done: bool | None
+) -> Todo | None:
+    """Change title and/or done in one UPDATE; None keeps the stored value."""
     async with conn.cursor(row_factory=class_row(Todo)) as cur:
         await cur.execute(
-            "UPDATE todos SET done = %s WHERE id = %s RETURNING id, title, done, created_at",
-            (done, todo_id),
+            "UPDATE todos SET title = COALESCE(%s::text, title), "
+            "done = COALESCE(%s::boolean, done) "
+            "WHERE id = %s RETURNING id, title, done, created_at",
+            (title, done, todo_id),
         )
         return await cur.fetchone()
 
