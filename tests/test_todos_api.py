@@ -55,6 +55,11 @@ def test_list_empty_returns_empty_array(client: TestClient):  # AC-001.1
     assert r.json() == []
 
 
+def test_list_is_not_cacheable(client: TestClient):
+    r = client.get("/todos")
+    assert r.headers["cache-control"] == "no-store"
+
+
 def test_list_three_ordered_with_exact_fields(client: TestClient):  # AC-001.2
     created = [create(client, t) for t in ("one", "two", "three")]
     r = client.get("/todos")
