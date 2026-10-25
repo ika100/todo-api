@@ -31,7 +31,8 @@
       "deps-bump":    "bash scripts/deps.sh bump",
       "ci":             "devbox run quality && devbox run test && devbox run security && if grep -qs '\"ci-extra\"[[:space:]]*:' devbox.json; then devbox run ci-extra; fi",
       "image-build":    "docker build -t todo-api:scan .",
-      "image-scan":     "trivy image --severity CRITICAL,HIGH --format table todo-api:scan"
+      "image-scan":     "trivy image --severity CRITICAL,HIGH --format table todo-api:scan",
+      "image-smoke":    "docker rm -f todo-api-smoke >/dev/null 2>&1; docker run -d --name todo-api-smoke --read-only --tmpfs /tmp -e DATABASE_URL=${DATABASE_URL:-postgresql://smoke:smoke@127.0.0.1:5432/smoke} -p 18080:8080 todo-api:scan >/dev/null && sleep 6 && { curl -s -w ' /health=%{http_code}\\n' localhost:18080/health || true; curl -s -w ' /ready=%{http_code}\\n' localhost:18080/ready || true; docker logs todo-api-smoke 2>&1 | tail -5; docker inspect -f 'user={{.Config.User}}' todo-api-smoke; }; docker rm -f todo-api-smoke >/dev/null"
     }
   }
 }
