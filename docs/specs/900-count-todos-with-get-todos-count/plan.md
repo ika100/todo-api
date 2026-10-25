@@ -17,6 +17,7 @@ tasks:
   covers: [AC-900.1, AC-900.2]
   parallel_safe: false
   depends_on: [t1]
+  done: true
 ---
 
 # Plan — 900 Count the todos with GET /todos/count
