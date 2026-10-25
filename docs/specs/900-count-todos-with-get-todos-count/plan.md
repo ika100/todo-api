@@ -2,14 +2,15 @@
 spec_id: 900-count-todos-with-get-todos-count
 shape: service-python
 spec_hash: 44aaaeaf0c84
-summary: "GET /todos/count returns {\"count\": n} from one SELECT count(*), without shadowing the id routes"
+summary: 'GET /todos/count returns {"count": n} from one SELECT count(*), without shadowing the id routes'
 tasks:
-  - id: t1
-    title: Add repository.count_todos and the GET /todos/count route
-    files: [src/todo_api/todos/repository.py, src/todo_api/todos/router.py, README.md]
-    covers: [AC-900.1, AC-900.2]
-    parallel_safe: true
-    depends_on: []
+- id: t1
+  title: Add repository.count_todos and the GET /todos/count route
+  files: [src/todo_api/todos/repository.py, src/todo_api/todos/router.py, README.md]
+  covers: [AC-900.1, AC-900.2]
+  parallel_safe: true
+  depends_on: []
+  done: true
 ---
 
 # Plan — 900 Count the todos with GET /todos/count
