@@ -47,6 +47,14 @@ async def create_todo(conn: AsyncConnection, title: str) -> Todo:
     return row
 
 
+async def count_todos(conn: AsyncConnection) -> int:
+    cur = await conn.execute("SELECT count(*) FROM todos")
+    row = await cur.fetchone()
+    if row is None:
+        raise RuntimeError("SELECT count(*) returned no row")
+    return int(row[0])
+
+
 async def update_todo(
     conn: AsyncConnection, todo_id: UUID, *, title: str | None, done: bool | None
 ) -> Todo | None:
