@@ -2,14 +2,15 @@
 spec_id: 900-count-todos-with-get-todos-count
 shape: service-python
 spec_hash: 0fe512a9e20b
-summary: "GET /todos/count returns the number of todos, computed with SELECT count(*)"
+summary: GET /todos/count returns the number of todos, computed with SELECT count(*)
 tasks:
-  - id: t1
-    title: Add count_todos query and GET /todos/count route
-    files: [src/todo_api/todos/repository.py, src/todo_api/todos/router.py]
-    covers: [AC-900.1, AC-900.2]
-    parallel_safe: true
-    depends_on: []
+- id: t1
+  title: Add count_todos query and GET /todos/count route
+  files: [src/todo_api/todos/repository.py, src/todo_api/todos/router.py]
+  covers: [AC-900.1, AC-900.2]
+  parallel_safe: true
+  depends_on: []
+  done: true
 ---
 
 # Plan — 900 Count the todos with GET /todos/count
