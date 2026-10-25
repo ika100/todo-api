@@ -209,6 +209,13 @@ async def test_create_todo_without_row_raises() -> None:
         await repository.create_todo(conn, "x")
 
 
+async def test_count_todos_without_row_raises() -> None:
+    cur = MagicMock(fetchone=AsyncMock(return_value=None))
+    conn = MagicMock(execute=AsyncMock(return_value=cur))
+    with pytest.raises(RuntimeError, match="returned no row"):
+        await repository.count_todos(conn)
+
+
 async def test_delete_todo_rowcount() -> None:
     for count, expected in ((1, True), (0, False)):
         conn = MagicMock(execute=AsyncMock(return_value=MagicMock(rowcount=count)))
