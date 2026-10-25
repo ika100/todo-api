@@ -2,7 +2,7 @@
 spec_id: 900-count-todos-with-get-todos-count
 shape: service-python
 spec_hash: 44aaaeaf0c84
-summary: "Add GET /todos/count returning the number of todos via one SELECT count(*), without shadowing the id routes"
+summary: Add GET /todos/count returning the number of todos via one SELECT count(*), without shadowing the id routes
 tasks:
 - id: t1
   title: Add repository.count_todos
@@ -10,6 +10,7 @@ tasks:
   covers: [AC-900.1, AC-900.2]
   parallel_safe: true
   depends_on: []
+  done: true
 - id: t2
   title: Add the GET /todos/count route and document it
   files: [src/todo_api/todos/router.py, README.md]
