@@ -23,6 +23,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/todos \
 ## API
 
 - `GET /todos` list todos
+- `GET /todos/count` count todos (`{"count": <int>}`)
 - `POST /todos` create a todo
 - `PATCH /todos/{id}` change a todo's title and/or done state (`{"title": "..."}`, `{"done": true|false}`)
 - `DELETE /todos/{id}` delete a todo

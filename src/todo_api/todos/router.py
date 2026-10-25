@@ -37,6 +37,16 @@ async def list_todos(request: Request) -> JSONResponse:
     return JSONResponse([to_json(t) for t in todos])
 
 
+@router.get("/count")
+async def count_todos(request: Request) -> JSONResponse:
+    """Count all todos.
+
+    Any future ``GET /todos/{todo_id}`` must be declared after this route.
+    """
+    count = await request.app.state.db.run(repository.count_todos)
+    return JSONResponse({"count": count})
+
+
 @router.post("")
 async def create_todo(request: Request) -> JSONResponse:
     title = parse_create(await request.body())
