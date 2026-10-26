@@ -1,7 +1,7 @@
 ---
 spec_id: 900-count-todos-with-get-todos-count
 title: Count the todos with GET /todos/count
-status: building
+status: done
 priority: P2
 shape: service-python
 ---
@@ -38,3 +38,4 @@ None.
 - 2026-10-25 created
 - 2026-10-25 approved
 - 2026-10-26 building
+- 2026-10-26 done
