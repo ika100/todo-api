@@ -23,11 +23,12 @@ DATABASE_URL=postgresql://user:password@localhost:5432/todos \
 ## API
 
 - `GET /todos` list todos
+- `GET /todos/count` number of todos as `{"count": n}`
 - `POST /todos` create a todo
 - `PATCH /todos/{id}` change a todo's title and/or done state (`{"title": "..."}`, `{"done": true|false}`)
 - `DELETE /todos/{id}` delete a todo
 
-Details: [spec 002](docs/specs/002-change-a-todo-s-title-through-patch/spec.md), [spec 001](docs/specs/001-todo-rest-api-list-create-mark-done-not/spec.md) and [design](docs/specs/001-todo-rest-api-list-create-mark-done-not/design.md).
+Details: [spec 900](docs/specs/900-count-todos-with-get-todos-count/spec.md), [spec 002](docs/specs/002-change-a-todo-s-title-through-patch/spec.md), [spec 001](docs/specs/001-todo-rest-api-list-create-mark-done-not/spec.md) and [design](docs/specs/001-todo-rest-api-list-create-mark-done-not/design.md).
 
 ## Conventions
 
