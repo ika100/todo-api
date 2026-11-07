@@ -48,6 +48,12 @@ async def create_todo(request: Request) -> JSONResponse:
     return JSONResponse(to_json(todo), status_code=201)
 
 
+@router.get("/count")
+async def count_todos(request: Request) -> JSONResponse:
+    n = await request.app.state.db.run(repository.count_todos)
+    return JSONResponse({"count": n})
+
+
 @router.patch("/{todo_id}")
 async def patch_todo(todo_id: str, request: Request) -> JSONResponse:
     req = parse_patch(await request.body())
