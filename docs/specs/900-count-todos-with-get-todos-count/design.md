@@ -20,6 +20,7 @@ This builds on the designs of [001](../001-todo-rest-api-list-create-mark-done-n
 # todos/repository.py
 async def count_todos(conn: AsyncConnection) -> int: ...  # SELECT count(*) FROM todos
 
+
 # todos/router.py
 @router.get("/count")
 async def count_todos(request: Request) -> JSONResponse: ...
