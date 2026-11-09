@@ -10,6 +10,7 @@ tasks:
     covers: [AC-900.1, AC-900.2]
     parallel_safe: true
     depends_on: []
+    done: true
   - id: t2
     title: Add the GET /todos/count route and document it
     files: [src/todo_api/todos/router.py, README.md]
