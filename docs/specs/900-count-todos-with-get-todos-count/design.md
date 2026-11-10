@@ -32,8 +32,9 @@ Pseudocode:
 # repository.py
 async def count_todos(conn: AsyncConnection) -> int:
     cur = await conn.execute("SELECT count(*) FROM todos")
-    row = await cur.fetchone()          # count(*) always yields one row
+    row = await cur.fetchone()  # count(*) always yields one row
     return int(row[0])
+
 
 # router.py
 @router.get("/count")
