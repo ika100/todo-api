@@ -18,7 +18,10 @@ Builds on the designs of [001](../001-todo-rest-api-list-create-mark-done-not/de
 
 ```python
 # todos/repository.py
-async def count_todos(conn: AsyncConnection) -> int: ...  # SELECT count(*) FROM todos; bound-free, constant SQL
+async def count_todos(
+    conn: AsyncConnection,
+) -> int: ...  # SELECT count(*) FROM todos; bound-free, constant SQL
+
 
 # todos/router.py
 @router.get("/count")
