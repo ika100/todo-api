@@ -37,6 +37,7 @@ async def count_todos(conn: AsyncConnection) -> int:
     row = await cur.fetchone()
     return int(row[0]) if row else 0
 
+
 # router.py
 @router.get("/count")
 async def count_todos_route(request: Request) -> JSONResponse:
