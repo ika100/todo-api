@@ -35,6 +35,12 @@ async def list_todos(conn: AsyncConnection) -> list[Todo]:
         return await cur.fetchall()
 
 
+async def count_todos(conn: AsyncConnection) -> int:
+    cur = await conn.execute("SELECT count(*) FROM todos")
+    row = await cur.fetchone()
+    return int(row[0]) if row else 0
+
+
 async def create_todo(conn: AsyncConnection, title: str) -> Todo:
     async with conn.cursor(row_factory=class_row(Todo)) as cur:
         await cur.execute(
