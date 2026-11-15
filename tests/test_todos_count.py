@@ -32,6 +32,22 @@ def test_count_with_no_todos(client: TestClient):  # AC-900.2
     assert type(body["count"]) is int
 
 
+def test_existing_endpoints_unchanged(client: TestClient):  # AC-900.2
+    r = client.post("/todos", json={"title": "keep"})
+    assert r.status_code == 201, r.text
+    todo = r.json()
+    assert client.get("/todos").json() == [todo]
+    r = client.patch(f"/todos/{todo['id']}", json={"done": True})
+    assert r.status_code == 200, r.text
+    assert r.json() == {**todo, "done": True}
+    r = client.delete(f"/todos/{todo['id']}")
+    assert r.status_code == 204
+    assert r.content == b""
+    assert client.get("/todos").json() == []
+    # the new route reflects the same state
+    assert client.get("/todos/count").json() == {"count": 0}
+
+
 def test_count_does_not_shadow_id_routes(client: TestClient):  # AC-900.2
     create(client, "a")
     # The route must exist (GET works) while PATCH/DELETE keep behaving like an unknown id.
