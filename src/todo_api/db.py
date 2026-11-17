@@ -13,7 +13,8 @@ from psycopg_pool import AsyncConnectionPool, PoolTimeout
 
 from todo_api.errors import DatabaseUnavailable
 
-OP_DEADLINE_S = 2.0  # AC-001.17 allows 3 s: 1 s headroom for the request around it (sdlc-foundry#738)
+# AC-001.17 allows 3 s: 1 s headroom for the request around it (sdlc-foundry#738)
+OP_DEADLINE_S = 2.0
 SCHEMA_LOCK_ID = 7_431_001_001
 
 T = TypeVar("T")
