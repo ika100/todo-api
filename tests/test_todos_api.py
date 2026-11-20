@@ -69,6 +69,12 @@ def test_list_three_ordered_with_exact_fields(client: TestClient):  # AC-001.2
     assert keys == sorted(keys)
 
 
+def test_list_is_not_cacheable(client: TestClient):
+    r = client.get("/todos")
+    assert r.status_code == 200
+    assert r.headers["cache-control"] == "no-store"
+
+
 # ---------------------------------------------------------------- AC-001.3 / .4
 
 
