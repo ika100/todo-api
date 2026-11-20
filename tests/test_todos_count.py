@@ -26,12 +26,16 @@ def test_count_no_todos(client: TestClient):  # AC-900.2
 
 
 def test_patch_count_is_not_found(client: TestClient):  # AC-900.2
+    # The count route exists and still does not shadow PATCH on the id route.
+    assert client.get("/todos/count").status_code == 200
     r = client.patch("/todos/count", json={"done": True})
     assert r.status_code == 404, r.text
     assert r.json() == NOT_FOUND
 
 
 def test_delete_count_is_not_found(client: TestClient):  # AC-900.2
+    # The count route exists and still does not shadow DELETE on the id route.
+    assert client.get("/todos/count").status_code == 200
     r = client.delete("/todos/count")
     assert r.status_code == 404, r.text
     assert r.json() == NOT_FOUND
