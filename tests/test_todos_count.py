@@ -19,6 +19,7 @@ def test_count_three_todos(client: TestClient):  # AC-900.1
     assert r.status_code == 200, r.text
     assert r.headers["content-type"].startswith("application/json")
     assert r.json() == {"count": 3}
+    assert type(r.json()["count"]) is int
 
 
 def test_count_no_todos(client: TestClient):  # AC-900.2
@@ -26,6 +27,7 @@ def test_count_no_todos(client: TestClient):  # AC-900.2
     assert r.status_code == 200, r.text
     assert r.headers["content-type"].startswith("application/json")
     assert r.json() == {"count": 0}
+    assert type(r.json()["count"]) is int
 
 
 def test_count_does_not_shadow_patch(client: TestClient):  # AC-900.2
