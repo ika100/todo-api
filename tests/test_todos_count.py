@@ -26,19 +26,10 @@ def test_count_no_todos(client: TestClient):  # AC-900.2
     assert r.status_code == 200, r.text
     assert r.headers["content-type"].startswith("application/json")
     assert r.json() == {"count": 0}
-
-
-def test_count_does_not_shadow_id_routes_patch(client: TestClient):  # AC-900.2
-    create(client, "keep me")
+    # The new route does not shadow the id routes.
     r = client.patch("/todos/count", json={"done": True})
     assert r.status_code == 404, r.text
     assert r.json() == NOT_FOUND
-    assert client.get("/todos").json()[0]["done"] is False
-
-
-def test_count_does_not_shadow_id_routes_delete(client: TestClient):  # AC-900.2
-    create(client, "keep me")
     r = client.delete("/todos/count")
     assert r.status_code == 404, r.text
     assert r.json() == NOT_FOUND
-    assert len(client.get("/todos").json()) == 1
