@@ -342,3 +342,9 @@ def test_recovery_without_restart(container_url):  # AC-001.18
         r = c.get("/todos")
         assert r.status_code == 200
         assert r.json() == [todo]
+
+
+def test_list_sends_cache_control_no_store(client: TestClient):
+    r = client.get("/todos")
+    assert r.status_code == 200
+    assert r.headers["Cache-Control"] == "no-store"
