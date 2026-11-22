@@ -21,14 +21,10 @@ def test_count_no_todos(client: TestClient):  # AC-900.2
     assert resp.status_code == 200
     assert resp.json() == {"count": 0}
 
+    patch_resp = client.patch("/todos/count", json={"done": True})
+    assert patch_resp.status_code == 404
+    assert patch_resp.json() == NOT_FOUND
 
-def test_patch_count_is_unknown_id(client: TestClient):  # AC-900.2
-    resp = client.patch("/todos/count", json={"done": True})
-    assert resp.status_code == 404
-    assert resp.json() == NOT_FOUND
-
-
-def test_delete_count_is_unknown_id(client: TestClient):  # AC-900.2
-    resp = client.delete("/todos/count")
-    assert resp.status_code == 404
-    assert resp.json() == NOT_FOUND
+    delete_resp = client.delete("/todos/count")
+    assert delete_resp.status_code == 404
+    assert delete_resp.json() == NOT_FOUND
