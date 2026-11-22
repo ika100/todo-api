@@ -55,6 +55,12 @@ def test_list_empty_returns_empty_array(client: TestClient):  # AC-001.1
     assert r.json() == []
 
 
+def test_list_sends_cache_control_no_store(client: TestClient):
+    r = client.get("/todos")
+    assert r.status_code == 200
+    assert r.headers["Cache-Control"] == "no-store"
+
+
 def test_list_three_ordered_with_exact_fields(client: TestClient):  # AC-001.2
     created = [create(client, t) for t in ("one", "two", "three")]
     r = client.get("/todos")
