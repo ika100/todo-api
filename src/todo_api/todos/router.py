@@ -34,7 +34,7 @@ def _not_found() -> ApiError:
 @router.get("")
 async def list_todos(request: Request) -> JSONResponse:
     todos = await request.app.state.db.run(repository.list_todos)
-    return JSONResponse([to_json(t) for t in todos])
+    return JSONResponse([to_json(t) for t in todos], headers={"Cache-Control": "no-store"})
 
 
 @router.post("")
