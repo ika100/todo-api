@@ -28,6 +28,7 @@ def test_count_no_todos(client: TestClient):  # AC-900.2
 
 
 def test_count_route_does_not_shadow_id_routes(client: TestClient):  # AC-900.2
+    assert client.get("/todos/count").status_code == 200
     patched = client.patch("/todos/count", json={"done": True})
     assert patched.status_code == 404
     assert patched.json() == NOT_FOUND
