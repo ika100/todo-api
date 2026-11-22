@@ -96,8 +96,17 @@ def client(request: pytest.FixtureRequest) -> Iterator[TestClient]:
         yield TestClient(app)
         return
     url = request.getfixturevalue("postgres_url")
-    with TestClient(create_app(database_url=url)) as c:
-        yield c
+    # Real-Postgres tests are not about the deadline; a loaded machine must not turn a slow
+    # query into a 503. Deadline behaviour is tested via ``running`` / unit tests.
+    from todo_api import db as db_mod
+
+    original = db_mod.OP_DEADLINE_S
+    db_mod.OP_DEADLINE_S = max(original, 10.0)
+    try:
+        with TestClient(create_app(database_url=url)) as c:
+            yield c
+    finally:
+        db_mod.OP_DEADLINE_S = original
 
 
 @pytest.fixture()
