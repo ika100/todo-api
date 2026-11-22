@@ -19,12 +19,14 @@ def test_count_three_todos(client: TestClient):  # AC-900.1
     assert r.status_code == 200
     assert r.headers["content-type"].startswith("application/json")
     assert r.json() == {"count": 3}
+    assert type(r.json()["count"]) is int
 
 
 def test_count_no_todos(client: TestClient):  # AC-900.2
     r = client.get("/todos/count")
     assert r.status_code == 200
     assert r.json() == {"count": 0}
+    assert type(r.json()["count"]) is int
 
 
 def test_count_route_does_not_shadow_id_routes(client: TestClient):  # AC-900.2
