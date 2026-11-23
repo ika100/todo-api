@@ -215,6 +215,22 @@ async def test_delete_todo_rowcount() -> None:
         assert await repository.delete_todo(conn, UUID(int=1)) is expected
 
 
+async def test_count_todos_returns_int_of_first_column() -> None:
+    cur = MagicMock(fetchone=AsyncMock(return_value=("7",)))
+    conn = MagicMock(execute=AsyncMock(return_value=cur))
+    result = await repository.count_todos(conn)
+    assert result == 7
+    assert isinstance(result, int)
+    conn.execute.assert_awaited_once()
+
+
+async def test_count_todos_without_row_raises() -> None:
+    cur = MagicMock(fetchone=AsyncMock(return_value=None))
+    conn = MagicMock(execute=AsyncMock(return_value=cur))
+    with pytest.raises(RuntimeError):
+        await repository.count_todos(conn)
+
+
 def _todo(created: datetime) -> repository.Todo:
     return repository.Todo(UUID("ABCDEFAB-0000-4000-8000-000000000001"), "t", True, created)
 
